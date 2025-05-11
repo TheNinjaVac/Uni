@@ -1,0 +1,166 @@
+
+## Código de Tarea 2
+Para compilar el programa de Tarea 2  usa:
+````
+gcc tdas/*.c tarea2.c -o tarea2 -I./tdas -Wno-unused-result
+````
+
+Y para ejecutarlo:
+````
+./tarea2
+````
+
+## Sinopsis
+Este programa es un sistema en C para la gestión y búsqueda de canciones. Su objetivo principal es cargar información desde un archivo CSV y organizarla utilizando estructuras de datos abstractas (TDA): una tabla hash para clasificar canciones por ID y por artista, y listas enlazadas simples para agrupar canciones según su tempo. Todo esto permite implementar de manera eficiente las cinco funciones principales del programa: 
+
+1. Cargar canciones desde un archivo CSV (song_dataset_.csv).
+
+2. Buscar canciones por ID, artista o tempo.
+
+3. Organizar canciones por categorías de tempo (lento, medio, rápido).
+
+4. Clasificar artistas con sus canciones.
+
+5. Usar estructuras tipo TDA como List y HashMap para un rendimiento óptimo.
+
+La interfaz es de consola e interactiva, con un menú para explorar las funcionalidades.
+
+
+## Funcion 
+
+1. La función leer_canciones se encarga de cargar la información de canciones desde un archivo CSV y organizarla en diferentes estructuras para facilitar futuras búsquedas.
+
+Primero, abre el archivo song_dataset_.csv y lee línea por línea, ignorando la primera que contiene los encabezados. Cada línea representa una canción y se divide en campos utilizando la función leer_linea_csv.
+
+Con los datos obtenidos, se crea una nueva estructura de tipo cancion, donde se guarda el ID, nombre de la canción, álbum, tempo, género y una lista de artistas. La lista de artistas se construye usando la función split_string, que permite separar múltiples nombres si están en una misma celda separados por punto y coma (;).
+
+Una vez creada la canción:
+
+1. 1. Se inserta en un mapa hash por ID, permitiendo buscar rápidamente por identificador.
+
+1. 2. Se actualiza otro mapa hash por artista, donde cada artista tiene asociada una lista de canciones. Si el artista no existe en el mapa, se crea una nueva entrada.
+
+1. 3. Además, se clasifica según el tempo de la canción: lento, medio o rápido, y se guarda en la lista correspondiente del TDA tempo.
+
+Esta función también controla errores como fallos de asignación de memoria, campos vacíos o mal formateados, y evita imprimir en exceso para no afectar el rendimiento con archivos grandes.
+
+Al final, se deja todo cargado y listo para que el usuario pueda buscar canciones por distintos criterios.
+
+2. Esta función permite al usuario buscar una canción específica ingresando su ID.
+Primero, se limpia la pantalla y se solicita el ID al usuario. Luego, se busca ese ID dentro del mapa hash de canciones (mapa_canciones) usando la función searchMap.
+
+Si se encuentra, se muestra toda la información de la canción: ID, título, lista de artistas, álbum, género y tempo.
+Si no se encuentra, se informa al usuario que no existe ninguna canción con ese ID.
+
+3. Permite al usuario buscar canciones por nombre de artista.
+
+Se solicita el nombre y se busca en el mapa hash de artistas (mapa_artistas), que asocia cada nombre de artista con una lista de canciones.
+
+Si se encuentra, se muestra el nombre del artista junto con todas sus canciones.
+Si no se encuentra, se notifica al usuario que no existe dicho artista.
+
+4. Agrupa y muestra canciones según su tempo, dividiéndolas en tres categorías:
+
+`Lento`: tempo menor a 80
+
+`Medio`: tempo entre 80 y 120
+
+`Rápido`: tempo mayor a 120
+
+El usuario debe ingresar una de estas tres categorías como texto.
+Luego, se accede a la lista correspondiente del TDA tempo, y se muestran todas las canciones que pertenecen a esa categoría.
+
+5. Finaliza la ejecución del programa de forma segura.
+Antes de salir, se llama a la función liberarTodo, que se encarga de liberar toda la memoria dinámica usada durante la ejecución:
+
+## Canciones
+
+## Artistas
+
+## Listas de tempo
+
+
+## TDAs
+En la carpeta `tdas` se encuentran implementados TDAs ha utilizar (extra, lista y map). 
+lista cuenta con las funciones:
+
+````````
+Extra
+````````
+
+`Funcion que lee una línea del archivo CSV y la separa en campos usando el delimitador dado`
+## char **leer_linea_csv(FILE *archivo, char separador);
+
+`Función para comparar cadenas`
+## List *split_string(const char *str, const char *delim);
+
+`Función para limpiar la pantalla`
+## void limpiarPantalla();
+
+`Función que espera a que el usuario presione una tecla para continuar`
+## void presioneTeclaParaContinuar();
+
+
+````````
+Lista
+````````
+
+`Esta función crea una lista vacía y devuelve un puntero a la lista.`
+## List *list_create();
+
+`Esta función devuelve un puntero al primer elemento de la lista.`
+## void *list_first(List *L);
+
+`Esta función mueve el puntero de la lista al siguiente elemento y devuelve un puntero a dicho elemento.`
+## void *list_next(List *L);
+
+`Esta función inserta un nuevo elemento al inicio de la lista.`
+## void list_pushFront(List *L, void *dato);
+
+`Esta función inserta un nuevo elemento al final de la lista.`
+## void list_pushBack(List *L, void *dato);
+
+`Esta función inserta un nuevo elemento a continuación del actual de la lista.`
+## void list_pushCurrent(List *L, void *dato);
+
+`Esta función elimina el primer elemento de la lista.`
+## void *list_popFront(List *L);
+
+`Esta función elimina el último elemento de la lista.`
+## void *list_popBack(List *L);
+
+`Esta función elimina el elemento actual de la lista.`
+## void *list_popCurrent(List *L);
+
+`Esta función elimina todos los elementos de la lista.`
+## void list_clean(List *L);
+
+`Función para insertar ordenado de acuerdo a la función lower_than`
+## void list_sortedInsert(List *L, void *data, int (*lower_than)(void *data1, void *data2));
+
+`Esta función encuentra el tamaño de la lista.`
+## int list_size(List* L);
+
+````````
+Map
+````````
+`Funcion para crear una tabla hash vacía con la capacidad inicial dada`
+## HashMap * createMap(long capacity);
+
+`Funcion que inserta un par clave-valor en la tabla hash, reemplaza si la clave ya existe`
+## void insertMap(HashMap * table, char * key, void * value);
+
+`Funcion que elimina un par clave-valor de la tabla hash`
+## void eraseMap(HashMap * table, char * key);
+
+`busca un par clave-valor en la tabla hash por su clave`
+## Pair * searchMap(HashMap * table, char * key);
+
+`retorna el primer par válido de la tabla hash (inicia la iteración)`
+## Pair * firstMap(HashMap * table);
+
+`retorna el siguiente par válido en la iteración de la tabla hash`
+## Pair * nextMap(HashMap * table);
+
+`duplica la capacidad de la tabla hash y reubica todos los elementos`
+## void enlarge(HashMap * map);
