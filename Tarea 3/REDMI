@@ -1,0 +1,150 @@
+## Código de Tarea 3
+Para compilar el programa de Tarea 3  usa:
+````
+gcc tdas/*.c tarea3.c -o tarea3 -I./tdas -Wno-unused-result
+````
+
+Y para ejecutarlo:
+````
+./tarea3
+````
+
+## Sinopsis
+Este programa es un sistema en C para la recreacion de un videjuego implementando grafos. Su objetivo principal es cargar información desde un archivo CSV, en este caso es el mapa del juego, y utilizando estructuras de datos abstractas (TDA): una tabla hash para almacenar cada mapa por ID y guardar en la tabla lo que contiene: id, nombre, descripcion, lista de items, si tiene una direccion; arriba, abajo, izquierda, derecha y si es el final del grafo.
+
+Para el juego utiliza una estructura de tipo Jugador, encargada de tener una lista del inventario, un puntaje total, un tiempo y el peso.
+
+Este programa tiene una estructura principal que es:
+
+1. Cargar el laberinto desde un archivo CSV (graphquest.csv).
+
+2. Inciar el Juego
+
+3. Salir
+
+dentro de opción 2, se encuentra la forma de jugar:
+
+1. Recoger Ítem(s) (Descuenta 1s)
+
+2. Descartar Ítem(s) (Descuenta 1s)
+
+3. Avanzar en una Dirección (Descuenta ((peso total +1 )/10.0))
+
+4. Reiniciar Partida (No descuenta Tiempo)
+
+5. Estadísticas del Jugador (No descuenta tiempo)
+
+6. Salir del juego
+
+## Funcion 
+
+1. La función leer_escenarios se encarga de cargar la información del laberinto desde un archivo CSV y organizarla en diferentes estructuras para facilitar futuras búsquedas.
+
+Primero, abre el archivo graphquest.csv y lee línea por línea, ignorando la primera que contiene los encabezados. Cada línea representa un mapa y se divide en campos utilizando la función leer_linea_csv.
+
+Con los datos obtenidos, se utiliza una estructura de tipo mapa y una estructura de tipo item, donde en la estructura mapa se guarda el id, nombre, descripcion, lista de items, si tiene una direccion; arriba, abajo, izquierda, derecha y si es el final del grafo. La estructura de tipo item, se utiliza en lista de items, para obtener el nombre, peso y puntaje o valor de cada objeto.
+
+Una vez creada el mapa, se inserta en un tabla hash por ID, permitiendo buscar rápidamente por identificador.
+
+2. Esta función permite al usuario iniciar el juego, llama a la funcion iniciarJuego, que inicializa el jugador con un tiempo = 15.00s, un peso de 0 y un valor inicial de 0, luego inicia el laberinto al ID = 1.
+
+3. Salir termina el programa y libera memoria.
+
+Dentro del caso 2, en iniciarJuego, se crean 5 funciones principales, que son:
+
+2. 1. Recoger Items: llama a la funcion itemsDisponibles, esta verifica si existe algun item en el mapa actual, si no existe ningun item, devuelve al menu principal, para seguir con las acciones. Si existe algun item en el mapa, pide escribir el nombre de este item "Pan", "Cuchillo", "Rubi"... o "salir", para terminar de recoger items, al existir un item y recorgerlo o no, se descuenta 1s.
+
+2. 2. Descartar Items: Tiene un funcionamiento parecido a recoger item, verifica si el usuario tiene algun objeto en su inventario, si no tiene ninguno, no descontara tiempo ni objetos, si tiene algun objeto en el inventario, "el objeto lo tirara al piso", es decir, se elimina de la lista inventario del jugador, y se almacena en el mapa actual, si el jugador tiene objetos y los descarta o no los descarta igualmente se le descontara 1s.
+
+2. 3. avanzarDireccion: Permite al jugador moverse a otro mapa dentro del laberinto según la dirección que elija (por ejemplo, arriba, abajo, izquierda o derecha). Esta función toma la dirección ingresada por el usuario, busca el ID del mapa correspondiente en esa dirección, y si existe, actualiza el mapa actual del jugador, descuenta tiempo en función del peso total del inventario y muestra información sobre el nuevo mapa; si el jugador llega a un mapa final, muestra un mensaje de victoria y termina el juego.
+
+2. 4. reiniciarPartida: Libera la memoria del grafo actual, crea una nueva copia del grafo original (restaurando todos los mapas e ítems a su estado inicial), reinicia el estado del jugador (inventario, peso, puntaje, tiempo y posición), y posiciona al jugador nuevamente en el mapa inicial, permitiendo así comenzar la partida desde cero como si fuera la primera vez.
+
+2. 5. Ver Estadisticas: Muestra todas las estadisticas de la estructura jugador: puntaje, peso total, tiempo, ademas llama a la funcion verInventario, muestra la lista de objetos del inventario. No descuenta tiempo.
+
+2. 6. Salir del juego, termina el juego y libera memoria.
+
+## TDAs
+En la carpeta `tdas` se encuentran implementados TDAs ha utilizar (extra, lista y map). 
+lista cuenta con las funciones:
+
+````````
+Extra
+````````
+
+`Funcion que lee una línea del archivo CSV y la separa en campos usando el delimitador dado`
+## char **leer_linea_csv(FILE *archivo, char separador);
+
+`Función para comparar cadenas`
+## List *split_string(const char *str, const char *delim);
+
+`Función para limpiar la pantalla`
+## void limpiarPantalla();
+
+`Función que espera a que el usuario presione una tecla para continuar`
+## void presioneTeclaParaContinuar();
+
+
+````````
+Lista
+````````
+
+`Esta función crea una lista vacía y devuelve un puntero a la lista.`
+## List *list_create();
+
+`Esta función devuelve un puntero al primer elemento de la lista.`
+## void *list_first(List *L);
+
+`Esta función mueve el puntero de la lista al siguiente elemento y devuelve un puntero a dicho elemento.`
+## void *list_next(List *L);
+
+`Esta función inserta un nuevo elemento al inicio de la lista.`
+## void list_pushFront(List *L, void *dato);
+
+`Esta función inserta un nuevo elemento al final de la lista.`
+## void list_pushBack(List *L, void *dato);
+
+`Esta función inserta un nuevo elemento a continuación del actual de la lista.`
+## void list_pushCurrent(List *L, void *dato);
+
+`Esta función elimina el primer elemento de la lista.`
+## void *list_popFront(List *L);
+
+`Esta función elimina el último elemento de la lista.`
+## void *list_popBack(List *L);
+
+`Esta función elimina el elemento actual de la lista.`
+## void *list_popCurrent(List *L);
+
+`Esta función elimina todos los elementos de la lista.`
+## void list_clean(List *L);
+
+`Función para insertar ordenado de acuerdo a la función lower_than`
+## void list_sortedInsert(List *L, void *data, int (*lower_than)(void *data1, void *data2));
+
+`Esta función encuentra el tamaño de la lista.`
+## int list_size(List* L);
+
+````````
+Map
+````````
+`Funcion para crear una tabla hash vacía con la capacidad inicial dada`
+## HashMap * createMap(long capacity);
+
+`Funcion que inserta un par clave-valor en la tabla hash, reemplaza si la clave ya existe`
+## void insertMap(HashMap * table, char * key, void * value);
+
+`Funcion que elimina un par clave-valor de la tabla hash`
+## void eraseMap(HashMap * table, char * key);
+
+`busca un par clave-valor en la tabla hash por su clave`
+## Pair * searchMap(HashMap * table, char * key);
+
+`retorna el primer par válido de la tabla hash (inicia la iteración)`
+## Pair * firstMap(HashMap * table);
+
+`retorna el siguiente par válido en la iteración de la tabla hash`
+## Pair * nextMap(HashMap * table);
+
+`duplica la capacidad de la tabla hash y reubica todos los elementos`
+## void enlarge(HashMap * map);
